@@ -1,0 +1,64 @@
+﻿@model List<ZeerabCollection.Entities.Product>
+@{
+    ViewBag.Title = "ProductTable";
+}
+<div id="tableContainer">
+    <form method="post">
+        <input id="searchTxt" name="Search" />
+        <button type="button" id="searchBtn">Search</button>
+    </form>  
+    <button type="button" id="newBtn">New</button>
+
+</div>
+<div>
+    <table>
+
+        <thead>
+            <tr>
+                <td>Product Name</td>
+                <td>Category</td>
+                <td>Price</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>-</td>
+                    <td>@product.Price</td>
+                    <td>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </td>
+                </tr>}
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    $("#searc hBtn").click(function () {
+        var searchtxt = $("#searchTxt").val();
+    
+    //this is fro ajax request we give url wher we can send request and wich type of data 
+    //we wnt to reques
+    $.ajax({
+        url: '/Product/ProductTable',
+        data: {
+            search: searchtxt
+        }
+    })
+        //if ajax is method work properly than done function call
+        .done(function (response) {
+            $("#tableContainer").html(response);
+        })
+        //if our request not succes or fail due to some reason then fail is called
+        .fail(function (XMLHttpRequest, textStatus, errorTheown) {
+            alert("Fail");
+            });
+    });
+</script>
+
+
