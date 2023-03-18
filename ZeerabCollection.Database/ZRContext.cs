@@ -8,7 +8,7 @@ using ZeerabCollection.Entities;
 
 namespace ZeerabCollection.Database
 {
-    public class ZRContext : DbContext
+    public class ZRContext : DbContext, IDisposable
     {
         public ZRContext() : base("ZeerabCollectionConnection")
         {
