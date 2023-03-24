@@ -38,7 +38,30 @@ namespace ZeerabCollection.Web.Controllers
         {
 
             productsService.SaveProduct(product);
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductTable");
+        }
+
+        //This method Show something to user or it shows the information that user want to see 
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var product = productsService.GetProduct(id);
+            return PartialView(product);
+        }
+        //This method use when a user send information to database  
+        [HttpPost]
+        public ActionResult Edit(Product product)
+        {
+
+            productsService.UpdateProduct(product);
+            return RedirectToAction("ProductTable");
+        }
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+
+            productsService.DeleteProduct(id);
+            return RedirectToAction("ProductTable");
         }
     }
 }

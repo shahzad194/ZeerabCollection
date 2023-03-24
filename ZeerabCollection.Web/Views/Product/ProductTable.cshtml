@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "ProductTable";
 }
-<div id="tableContainer">
+<div >
     <form method="post">
         <input id="searchTxt" name="Search" />
         <button type="button" id="searchBtn">Search</button>
@@ -29,8 +29,8 @@
                     <td>-</td>
                     <td>@product.Price</td>
                     <td>
-                        <button>Edit</button>
-                        <button>Delete</button>
+                        <button class="editBtn" data-id="@product.ID">Edit</button>
+                        <button class="deleteBtn" data-id="@product.ID">Delete</button>
                     </td>
                 </tr>}
         </tbody>
@@ -38,26 +38,72 @@
 </div>
 
 <script>
-
-    $("#searc hBtn").click(function () {
-        var searchtxt = $("#searchTxt").val();
-    
-    //this is fro ajax request we give url wher we can send request and wich type of data 
-    //we wnt to reques
-    $.ajax({
-        url: '/Product/ProductTable',
-        data: {
-            search: searchtxt
-        }
-    })
-        //if ajax is method work properly than done function call
-        .done(function (response) {
-            $("#tableContainer").html(response);
+    //Search Button 
+    $("#searchBtn").click(function () {
+        var searchTxt = $("#searchTxt").val();
+        $.ajax({
+            url: '/Product/ProductTable',
+            data: {
+                search: searchTxt
+            }
         })
-        //if our request not succes or fail due to some reason then fail is called
-        .fail(function (XMLHttpRequest, textStatus, errorTheown) {
-            alert("Fail");
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+                alert("Fail");
             });
+    });
+
+    //New Button 
+    $("#newBtn").click(function () {
+        $.ajax({
+            url: '/Product/Create',
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorTheown) {
+                alert("Fail");
+            });
+    });
+    //Edit Button 
+    $(".editBtn").click(function () {
+        $.ajax({
+            url: '/Product/Edit',
+            data: {
+                ID: $(this).attr('data-id')
+            }
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorTheown) {
+                alert("Fail");
+            });
+    });
+
+    //Delete Button 
+    $(".deleteBtn").click(function () {
+        var ConfirmDelete = confirm("Are you sure you want to delete?");
+
+        if (ConfirmDelete)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/Product/Delete',
+                data: {
+                    ID: $(this).attr('data-id')
+                }
+            })
+                .done(function (response) {
+                    $("#tableContainer").html(response);
+                })
+                .fail(function (XMLHttpRequest, textStatus, errorTheown) {
+                    alert("Fail");
+                });
+        }
+   
     });
 </script>
 
